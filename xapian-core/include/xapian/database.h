@@ -129,6 +129,9 @@ class XAPIAN_VISIBILITY_DEFAULT Database {
 	 */
 	void operator=(const Database &other);
 
+	// LOGS
+	void log(const std::string &query);
+
 	/** Re-open the database.
 	 *
 	 *  This re-opens the database(s) to the latest available version(s).

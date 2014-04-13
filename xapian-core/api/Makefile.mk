@@ -49,4 +49,5 @@ lib_src +=\
 	api/valuerangeproc.cc\
 	api/valuesetmatchdecider.cc\
 	api/vectortermlist.cc\
-	api/version.cc
+	api/version.cc\
+	api/trie.cc

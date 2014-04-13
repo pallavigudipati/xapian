@@ -97,6 +97,9 @@
 // ELF visibility annotations for GCC.
 #include <xapian/visibility.h>
 
+// Trie
+#include <xapian/trie.h>
+
 /// The Xapian namespace contains public interfaces for the Xapian library.
 namespace Xapian {
 

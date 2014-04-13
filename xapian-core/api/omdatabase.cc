@@ -43,6 +43,10 @@
 #include "expand/ortermlist.h"
 #include "noreturn.h"
 
+// TODO remove later
+#include <iostream>
+#include <fstream>
+
 #include <cstdlib> // For abs().
 
 #include <cstring>
@@ -113,6 +117,18 @@ Database::~Database()
     LOGCALL_DTOR(API, "Database");
 }
 
+// LOG Function
+void
+Database::log(const std::string &query) {
+	cout << "In Database::log" << endl;
+	// For now usind DB's UUID to record logs
+	string logname = "../logs/" + this->get_uuid();
+	cout << "Log file: " << logname << "Query " << query << endl; 
+	std::ofstream logfile(logname.c_str(), ios::out | ios::app);
+	logfile << query << endl;
+    logfile.close();
+}
+	
 bool
 Database::reopen()
 {

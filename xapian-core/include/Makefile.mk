@@ -39,7 +39,8 @@ xapianinclude_HEADERS =\
 	include/xapian/valuesetmatchdecider.h\
 	include/xapian/geospatial.h\
 	include/xapian/visibility.h\
-	include/xapian/weight.h
+	include/xapian/weight.h\
+	include/xapian/trie.h
 
 nodist_xapianinclude_HEADERS =\
 	include/xapian/version.h
