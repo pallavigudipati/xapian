@@ -33,10 +33,10 @@ Trie::Trie() {
 void
 Trie::add_term(std::string term) {
 	struct trie_node *curr_node = &root;
-	for (int i = 0; i < term.size(); ++i) {
+	for (unsigned int i = 0; i < term.size(); ++i) {
 		for (vector<trie_node *>::iterator it = curr_node->children.begin();
 				it != curr_node->children.end(); ++it) {
-			if (*it->value == term[i]) {
+			if ((*it)->value == term[i]) {
 				curr_node = *it;
 				break;
 			} else if(it + 1 == curr_node->children.end() || 
@@ -55,10 +55,10 @@ Trie::add_term(std::string term) {
 bool
 Trie::search_term(std::string term) {
 	struct trie_node *curr_node = &root;
-	for (int i = 0; i < term.size(); ++i) {
+	for (unsigned int i = 0; i < term.size(); ++i) {
 		for (vector<trie_node *>::iterator it = curr_node->children.begin();
 				it != curr_node->children.end(); ++it) {
-			if (*it->value == term[i]) {
+			if ((*it)->value == term[i]) {
 				curr_node = *it;
 				break;
 			} else if(it + 1 == curr_node->children.end() || 

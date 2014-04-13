@@ -20,7 +20,6 @@
 #ifndef XAPIAN_INCLUDED_TRIE_H
 #define XAPIAN_INCLUDED_TRIE_H
 
-#include <xapian/base.h>
 #include <xapian/visibility.h>
 
 #include <string>

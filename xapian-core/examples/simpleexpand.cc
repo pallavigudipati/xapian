@@ -71,6 +71,8 @@ try {
 	}
     }
 
+	Xapian::Trie trie;
+	
     // Parse the query string to produce a Xapian::Query object.
     Xapian::QueryParser qp;
     Xapian::Stem stemmer("english");
