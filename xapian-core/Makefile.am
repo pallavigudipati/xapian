@@ -84,10 +84,12 @@ include docsource.mk
 m4datadir = $(datadir)/aclocal
 dist_m4data_DATA = m4-macros/xapian-1.3.m4
 
+wordnet = -L/usr/local/WordNet-3.0/lib/ -lWN
+#wordnet = -L/home/pallavi/Xapian/WordNet-3.0/lib/ -lWN
 libxapian_la = libxapian-1.3.la
 lib_LTLIBRARIES = libxapian-1.3.la
 libxapian_1_3_la_SOURCES = $(lib_src)
-libxapian_1_3_la_LIBADD = $(XAPIAN_LIBS)
+libxapian_1_3_la_LIBADD = $(wordnet) $(XAPIAN_LIBS)
 libxapian_1_3_la_LDFLAGS = \
     $(XAPIAN_LDFLAGS) -no-undefined -version-info $(LIBRARY_VERSION_INFO)
 

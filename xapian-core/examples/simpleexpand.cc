@@ -20,6 +20,8 @@
 
 #include <xapian.h>
 
+#include "/usr/local/WordNet-3.0/include/wn.h"
+
 #include <iostream>
 #include <string>
 
@@ -43,10 +45,22 @@ try {
 		rc = 0;
 	    }
 	}
-	cout << "Usage: " << argv[0] << " PATH_TO_DATABASE QUERY [-- [DOCID...]]" << endl;
+	cout << "Usage: " << argv[0] << " PATH_TO_DATABASE QUERY [-- [DOCID...]]" 
+		<< endl;
 	exit(rc);
     }
 
+	//TODO Trying out WordNet stuff. Have to move it ot its own class.
+	int check = wninit();
+	if (check != 0) {
+		cout << "ERROR: WordNet Database not accessible." << endl;
+	}
+	char *syns = findtheinfo(argv[2], NOUN, 23, ALLSENSES);
+	if (syns == NULL) {
+		cout << "syns is NULL" << endl;
+	}
+	cout << syns << endl;
+	
     // Open the database for searching.
     Xapian::Database db(argv[1]);
 
@@ -70,6 +84,9 @@ try {
 	    rset.add_document(atoi(*argv));
 	}
     }
+
+	// Log the query
+	db.log(query_string);
 
 	Xapian::Trie trie;
 	
