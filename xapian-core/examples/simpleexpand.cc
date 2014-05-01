@@ -87,6 +87,11 @@ try {
 	char letter;
 	vector<string> subtree;
 
+
+	// Checking expand
+	Xapian::Expand exp;
+	cout << exp.test << endl;
+
 	while (1) {
 		cout << query_string;
 		cin >> letter;

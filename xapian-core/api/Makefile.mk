@@ -50,4 +50,5 @@ lib_src +=\
 	api/valuesetmatchdecider.cc\
 	api/vectortermlist.cc\
 	api/version.cc\
-	api/trie.cc
+	api/trie.cc\
+	api/synonymexpansion.cc

@@ -100,6 +100,9 @@
 // Trie
 #include <xapian/trie.h>
 
+// Synonym Expansion
+#include <xapian/synonymexpansion.h>
+
 /// The Xapian namespace contains public interfaces for the Xapian library.
 namespace Xapian {
 
