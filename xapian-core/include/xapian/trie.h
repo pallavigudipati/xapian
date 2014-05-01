@@ -21,6 +21,7 @@
 #define XAPIAN_INCLUDED_TRIE_H
 
 #include <xapian/visibility.h>
+#include <xapian.h>
 
 #include <string>
 #include <vector>
@@ -44,7 +45,9 @@ class XAPIAN_VISIBILITY_DEFAULT Trie {
 	Trie();
     // ~Trie();
 	void add_term(std::string term);
-	bool search_term(std::string term);
+	struct trie_node * search_term(std::string term);
+	std::vector<std::string> get_subtree(std::string term);
+	void build_tree(Database db);
 };
 
 }

@@ -34,22 +34,22 @@ int
 main(int argc, char **argv)
 try {
     // We require at least two command line arguments.
-    if (argc < 3) {
-	int rc = 1;
-	if (argv[1]) {
-	    if (strcmp(argv[1], "--version") == 0) {
-		cout << "simpleexpand" << endl;
-		exit(0);
-	    }
-	    if (strcmp(argv[1], "--help") == 0) {
-		rc = 0;
-	    }
-	}
-	cout << "Usage: " << argv[0] << " PATH_TO_DATABASE QUERY [-- [DOCID...]]" 
-		<< endl;
-	exit(rc);
+    if (argc < 2) {
+		int rc = 1;
+		if (argv[1]) {
+			if (strcmp(argv[1], "--version") == 0) {
+			cout << "simpleexpand" << endl;
+			exit(0);
+			}
+			if (strcmp(argv[1], "--help") == 0) {
+			rc = 0;
+			}
+		}
+		cout << "Usage: " << argv[0] 
+			<< " PATH_TO_DATABASE QUERY [-- [DOCID...]]" << endl;
+		exit(rc);
     }
-
+/*
 	//TODO Trying out WordNet stuff. Have to move it ot its own class.
 	int check = wninit();
 	if (check != 0) {
@@ -60,7 +60,7 @@ try {
 		cout << "syns is NULL" << endl;
 	}
 	cout << syns << endl;
-	
+*/	
     // Open the database for searching.
     Xapian::Database db(argv[1]);
 
@@ -70,26 +70,52 @@ try {
     // Combine command line arguments up to "--" with spaces between
     // them, so that simple queries don't have to be quoted at the shell
     // level.
+	/*
     string query_string(argv[2]);
     argv += 3;
     while (*argv && strcmp(*argv, "--") != 0) {
-	query_string += ' ';
-	query_string += *argv++;
+		query_string += ' ';
+		query_string += *argv++;
     }
+	*/
 
-    // Create an RSet with the listed docids in.
-    Xapian::RSet rset;
-    if (*argv) {
-	while (*++argv) {
-	    rset.add_document(atoi(*argv));
+	// Trie Checking
+	Xapian::Trie trie;
+	trie.build_tree(db);
+
+	string query_string;
+	char letter;
+	vector<string> subtree;
+
+	while (1) {
+		cout << query_string;
+		cin >> letter;
+		if (letter == '.') {
+			break;
+		}
+		query_string.push_back(letter);
+		subtree = trie.get_subtree(query_string);
+		for (unsigned int j = 0; j < subtree.size(); ++j) {
+			cout << subtree[j] << endl;
+		}
 	}
+
+	cout << "Final query " << query_string << endl;
+    
+    Xapian::RSet rset;
+	/*
+	// Create an RSet with the listed docids in.
+    if (*argv) {
+		while (*++argv) {
+	    	rset.add_document(atoi(*argv));
+		}
     }
+	*/
 
 	// Log the query
 	db.log(query_string);
 
-	Xapian::Trie trie;
-	
+
     // Parse the query string to produce a Xapian::Query object.
     Xapian::QueryParser qp;
     Xapian::Stem stemmer("english");
@@ -114,12 +140,12 @@ try {
     // If no relevant docids were given, invent an RSet containing the top 5
     // matches (or all the matches if there are less than 5).
     if (rset.empty()) {
-	int c = 5;
-	Xapian::MSetIterator i = matches.begin();
-	while (c-- && i != matches.end()) {
-	    rset.add_document(*i);
-	    ++i;
-	}
+		int c = 5;
+		Xapian::MSetIterator i = matches.begin();
+		while (c-- && i != matches.end()) {
+			rset.add_document(*i);
+			++i;
+		}
     }
 
     // Generate an ESet containing terms that the user might want to add to
@@ -129,7 +155,7 @@ try {
     // List the terms.
     Xapian::ESetIterator t;
     for (t = eset.begin(); t != eset.end(); ++t) {
-	cout << *t << ": weight = " << t.get_weight() << endl;
+		cout << *t << ": weight = " << t.get_weight() << endl;
     }
 } catch (const Xapian::Error &e) {
     cout << e.get_description() << endl;

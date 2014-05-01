@@ -20,6 +20,8 @@
 #include "xapian/trie.h"
 #include "/usr/local/WordNet-3.0/include/wn.h"
 
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -33,27 +35,41 @@ Trie::Trie() {
 
 void
 Trie::add_term(std::string term) {
+	// cout << "In add_term: " << term << endl;
 	struct trie_node *curr_node = &root;
 	for (unsigned int i = 0; i < term.size(); ++i) {
-		for (vector<trie_node *>::iterator it = curr_node->children.begin();
-				it != curr_node->children.end(); ++it) {
-			if ((*it)->value == term[i]) {
-				curr_node = *it;
-				break;
-			} else if(it + 1 == curr_node->children.end() || 
-					  (*it)->value > term[i]) {
-				struct trie_node *new_node = new trie_node();
-				new_node->value = term[i];
-				curr_node->children.insert(it, new_node);
-				curr_node = *it;
-				break;	
+		if (curr_node->children.size()) {
+			for (vector<trie_node *>::iterator it = curr_node->children.begin();
+					it != curr_node->children.end(); ++it) {
+				if ((*it)->value == term[i]) {
+					curr_node = *it;
+					break;
+				} else if(it + 1 == curr_node->children.end() && 
+							(*it)->value < term[i]) {
+					struct trie_node *new_node = new trie_node();
+					new_node->value = term[i];
+					curr_node->children.push_back(new_node);
+					curr_node = curr_node->children.back();
+					break;	
+				} else if ((*it)->value > term[i]) {
+					struct trie_node *new_node = new trie_node();
+					new_node->value = term[i];
+					it = curr_node->children.insert(it, new_node);
+					curr_node = *it;
+					break;	
+				}
 			}
+		} else {
+			struct trie_node *new_node = new trie_node();
+			new_node->value = term[i];
+			curr_node->children.push_back(new_node);
+			curr_node = curr_node->children[0];
 		}	
 	}
 	curr_node->is_child = true;
 }
 
-bool
+struct trie_node *
 Trie::search_term(std::string term) {
 	struct trie_node *curr_node = &root;
 	for (unsigned int i = 0; i < term.size(); ++i) {
@@ -64,11 +80,44 @@ Trie::search_term(std::string term) {
 				break;
 			} else if(it + 1 == curr_node->children.end() || 
 					  (*it)->value > term[i]) {
-				return false;
+				return NULL;
 			}
 		}	
 	}
-	return true;
+	return curr_node;
+}
+
+vector<std::string> 
+Trie::get_subtree(std::string term) {
+	struct trie_node *start = search_term(term);
+	vector<string> subtree;
+	if (start && (start->children).size()) {
+		for (vector<trie_node *>::iterator it = start->children.begin();
+				it != start->children.end(); ++it) {
+			std::string child_term = term;
+			child_term.push_back((*it)->value);
+			vector<std::string> child_tree = get_subtree(child_term);
+			if ((*it)->is_child) {
+				subtree.push_back(child_term);
+			}
+			subtree.reserve(subtree.size() + child_tree.size());
+			subtree.insert(subtree.end(), child_tree.begin(), child_tree.end());
+		}
+	}
+	return subtree;
+}
+
+void
+Trie::build_tree(Database db) {
+	string logname = "../logs/" + db.get_uuid();
+	// cout << "Log file: " << logname << endl; 
+	std::ifstream logfile(logname.c_str(), std::ifstream::in);
+	string query;
+	while (getline(logfile, query)) {
+		this->add_term(query);
+		// cout << "building " << query << endl;
+	}
+	logfile.close();
 }
 
 }
