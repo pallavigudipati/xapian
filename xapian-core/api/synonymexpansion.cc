@@ -21,16 +21,30 @@
 #include "/usr/local/WordNet-3.0/include/wn.h"
 
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <vector>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 using namespace std;
 
 namespace Xapian {
 
-Expand::SynonymExpand(std::string query) {
+SynonymExpand::SynonymExpand(std::string query) {
 	original_query = query;
+
+	boost::algorithm::split(results, original_query,
+							boost::algorithm::is_any_of(" "));
+	for (int i = 0; i < results.size(); ++i) {
+		cout << results[i] << endl;
+	}
+
+	int check = wninit();
+	if (check != 0) {
+		cout << "ERROR: WordNet Database not accessible." << endl;
+	}
+	
+
 }
 
 }

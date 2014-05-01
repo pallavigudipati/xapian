@@ -89,8 +89,7 @@ try {
 
 
 	// Checking expand
-	Xapian::Expand exp;
-	cout << exp.test << endl;
+	Xapian::SynonymExpand exp("hello bye");
 
 	while (1) {
 		cout << query_string;

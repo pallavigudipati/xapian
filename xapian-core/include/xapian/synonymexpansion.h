@@ -30,9 +30,10 @@ namespace Xapian {
 
 class XAPIAN_VISIBILITY_DEFAULT SynonymExpand{
   public:
-	SynonymExpand();
-	
 	std::string original_query;
+	std::vector<std::string> results;
+	
+	SynonymExpand(std::string query);
 };
 
 }
