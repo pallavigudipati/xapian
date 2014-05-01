@@ -29,7 +29,7 @@ using namespace std;
 
 namespace Xapian {
 
-Expand::SynonymExpand(std::string query) {
+SynonymExpand::SynonymExpand(std::string query) {
 	original_query = query;
 }
 
