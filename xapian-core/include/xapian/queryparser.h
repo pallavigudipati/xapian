@@ -34,6 +34,7 @@
 #include <xapian/visibility.h>
 
 #include <set>
+#include <fstream>
 #include <string>
 
 namespace Xapian {
@@ -59,6 +60,7 @@ class XAPIAN_VISIBILITY_DEFAULT Stopper {
 
 /// Simple implementation of Stopper class - this will suit most users.
 class XAPIAN_VISIBILITY_DEFAULT SimpleStopper : public Stopper {
+  protected:
     std::set<std::string> stop_words;
 
   public:
@@ -74,7 +76,7 @@ class XAPIAN_VISIBILITY_DEFAULT SimpleStopper : public Stopper {
     // pointing to const char *.
     template <class Iterator>
     SimpleStopper(Iterator begin, Iterator end) {
-	while (begin != end) stop_words.insert(*begin++);
+        while (begin != end) stop_words.insert(*begin++);
     }
 #endif
 
@@ -86,6 +88,25 @@ class XAPIAN_VISIBILITY_DEFAULT SimpleStopper : public Stopper {
     }
 
     virtual std::string get_description() const;
+};
+
+class XAPIAN_VISIBILITY_DEFAULT PopulatedSimpleStopper : public SimpleStopper {
+
+    public:
+        /// Initialise from a pair of iterators.
+        template <class Iterator>
+        PopulatedSimpleStopper(Iterator begin, Iterator end) : SimpleStopper(begin, end) { }
+
+        PopulatedSimpleStopper(const std::string &filename="/usr/local/src/xapian-dev/xapian-core/common/stop_words.txt") {
+            std::ifstream input(filename.c_str());
+            std::string word;
+            while (input.good()) {
+                input >> word;
+                add(word);
+            }
+        }
+
+        virtual std::string get_description() const;
 };
 
 /// Base class for value range processors.
