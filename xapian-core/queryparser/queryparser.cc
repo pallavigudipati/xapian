@@ -56,6 +56,20 @@ SimpleStopper::get_description() const
     return desc;
 }
 
+string
+PopulatedSimpleStopper::get_description() const
+{
+    string desc("Xapian::PopulatedSimpleStopper(");
+    set<string>::const_iterator i;
+    for (i = stop_words.begin(); i != stop_words.end(); ++i) {
+	if (i != stop_words.begin()) desc += ' ';
+	desc += *i;
+    }
+    desc += ')';
+    return desc;
+}
+
+
 ValueRangeProcessor::~ValueRangeProcessor() { }
 
 FieldProcessor::~FieldProcessor() { }

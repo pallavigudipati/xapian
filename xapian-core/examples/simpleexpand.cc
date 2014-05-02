@@ -20,9 +20,10 @@
 
 #include <xapian.h>
 
-#include "/usr/local/WordNet-3.0/include/wn.h"
+#include "wordnet/wn.h"
 
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include <cstdlib> // For exit().
@@ -49,18 +50,18 @@ try {
 			<< " PATH_TO_DATABASE QUERY [-- [DOCID...]]" << endl;
 		exit(rc);
     }
-/*
-	//TODO Trying out WordNet stuff. Have to move it ot its own class.
-	int check = wninit();
-	if (check != 0) {
-		cout << "ERROR: WordNet Database not accessible." << endl;
-	}
-	char *syns = findtheinfo(argv[2], NOUN, 23, ALLSENSES);
-	if (syns == NULL) {
-		cout << "syns is NULL" << endl;
-	}
-	cout << syns << endl;
-*/	
+
+    //TODO Trying out WordNet stuff. Have to move it ot its own class.
+    //int check = wninit();
+    //if (check != 0) {
+        //cout << "ERROR: WordNet Database not accessible." << endl;
+    //}
+    //char *syns = findtheinfo(argv[2], NOUN, 23, ALLSENSES);
+    //if (syns == NULL) {
+        //cout << "syns is NULL" << endl;
+    //}
+    //cout << syns << endl;
+    
     // Open the database for searching.
     Xapian::Database db(argv[1]);
 
@@ -87,13 +88,9 @@ try {
 	char letter;
 	vector<string> subtree;
 
-
-	// Checking expand
-	Xapian::SynonymExpand exp("hello bye");
-
 	while (1) {
-		cout << query_string;
-		cin >> letter;
+		cout << query_string << endl;
+		cin.get(letter);
 		if (letter == '.') {
 			break;
 		}
@@ -102,9 +99,19 @@ try {
 		for (unsigned int j = 0; j < subtree.size(); ++j) {
 			cout << subtree[j] << endl;
 		}
+        cout << endl;
 	}
 
 	cout << "Final query " << query_string << endl;
+
+    // Checking expand
+    cout << "Checking query expand" << endl;
+    Xapian::SynonymExpand exp(query_string);
+    cout << "Original query: " << exp.original_query << endl;
+    cout << "Results:" << endl;
+    for (unsigned i=0; i < exp.results.size(); ++i) {
+        cout << exp.results[i] << endl;
+    }
     
     Xapian::RSet rset;
 	/*
@@ -119,14 +126,15 @@ try {
 	// Log the query
 	db.log(query_string);
 
-
     // Parse the query string to produce a Xapian::Query object.
     Xapian::QueryParser qp;
     Xapian::Stem stemmer("english");
     qp.set_stemmer(stemmer);
     qp.set_database(db);
     qp.set_stemming_strategy(Xapian::QueryParser::STEM_SOME);
+    qp.set_stopper(new Xapian::PopulatedSimpleStopper("./stop_words"));
     Xapian::Query query = qp.parse_query(query_string);
+
     cout << "Parsed query is: " << query.get_description() << endl;
 
     // Find the top 10 results for the query.

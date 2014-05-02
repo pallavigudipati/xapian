@@ -18,7 +18,7 @@
  */
 
 #include "xapian/trie.h"
-#include "/usr/local/WordNet-3.0/include/wn.h"
+#include "wordnet/wn.h"
 
 #include <iostream>
 #include <fstream>
