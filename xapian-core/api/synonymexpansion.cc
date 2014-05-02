@@ -36,14 +36,6 @@ namespace Xapian {
         original_query = input_query;
         vector<string> query_words;
 
-        // Populate stop word list in SimpleStopper
-        Xapian::SimpleStopper stopper;
-        ifstream input("./stop_words");
-        string word;
-        while (input.good()) {
-            input >> word;
-            stopper.add(word);
-        }
         //cout << stopper.get_description();
 
         // Parse the query string to produce a Xapian::Query object.
@@ -51,7 +43,7 @@ namespace Xapian {
         Xapian::Stem stemmer("english");
         qp.set_stemmer(stemmer); // stemming
         qp.set_stemming_strategy(Xapian::QueryParser::STEM_SOME);
-        qp.set_stopper(&stopper); // stop word removal
+        qp.set_stopper(new PopulatedSimpleStopper()); // stop word removal
         Xapian::Query query = qp.parse_query(original_query);
 
         cout << "Parsed query is: " << query.get_description() << endl;
@@ -61,6 +53,7 @@ namespace Xapian {
                 it != query.get_terms_end();
                 ++it) {
             string term = *it;
+            // Remove Z in front of terms added by Xapian
             stripped_query_string += term.substr(1, term.length()-1) + " ";
         }
 
@@ -91,7 +84,7 @@ namespace Xapian {
             // in_wn() expects a non-const char *
             char *word = new char[query_words[i].length()];
             strcpy(word, query_words[i].c_str());
-            cout << "word=" << word << endl;
+            //cout << "word=" << word << endl;
 
             unsigned noun_in_wn = in_wn(word, NOUN);
             //cout << "noun_in_wn=" << noun_in_wn << endl;

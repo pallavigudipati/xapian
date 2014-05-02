@@ -93,7 +93,6 @@ class XAPIAN_VISIBILITY_DEFAULT SimpleStopper : public Stopper {
 class XAPIAN_VISIBILITY_DEFAULT PopulatedSimpleStopper : public SimpleStopper {
 
     public:
-        PopulatedSimpleStopper() { }
         /// Initialise from a pair of iterators.
         template <class Iterator>
         PopulatedSimpleStopper(Iterator begin, Iterator end) : SimpleStopper(begin, end) { }
