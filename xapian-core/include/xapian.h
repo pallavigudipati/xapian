@@ -23,7 +23,7 @@
 #ifdef slots
 # ifdef Q_OBJECT
 // Qt headers '#define slots' by default, which clashes with us using it as a
-// class member name.  Including <xapian.h> first is a simple workaround, or
+// class member name.  Including <xapian.h< first is a simple workaround, or
 // you can use 'no_keywords' to stop Qt polluting the global macro namespace,
 // as described here:
 //

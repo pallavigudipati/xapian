@@ -19,6 +19,7 @@
  */
 
 #include <xapian.h>
+// #include <gtk/gtk.h>
 
 #include "/usr/local/WordNet-3.0/include/wn.h"
 
@@ -29,6 +30,11 @@
 #include <cstring>
 
 using namespace std;
+
+void test() {
+	Xapian::Trie trie;
+}
+
 
 int
 main(int argc, char **argv)
@@ -49,18 +55,18 @@ try {
 			<< " PATH_TO_DATABASE QUERY [-- [DOCID...]]" << endl;
 		exit(rc);
     }
-/*
+
 	//TODO Trying out WordNet stuff. Have to move it ot its own class.
 	int check = wninit();
 	if (check != 0) {
 		cout << "ERROR: WordNet Database not accessible." << endl;
 	}
-	char *syns = findtheinfo(argv[2], NOUN, 23, ALLSENSES);
+	char *syns = findtheinfo("watch", NOUN, 23, ALLSENSES);
 	if (syns == NULL) {
 		cout << "syns is NULL" << endl;
 	}
 	cout << syns << endl;
-*/	
+	
     // Open the database for searching.
     Xapian::Database db(argv[1]);
 

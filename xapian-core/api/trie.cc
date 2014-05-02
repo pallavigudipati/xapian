@@ -109,7 +109,7 @@ Trie::get_subtree(std::string term) {
 
 void
 Trie::build_tree(Database db) {
-	string logname = "../logs/" + db.get_uuid();
+	string logname = "/home/pallavi/POSE/xapian/xapian-core/logs/" + db.get_uuid();
 	// cout << "Log file: " << logname << endl; 
 	std::ifstream logfile(logname.c_str(), std::ifstream::in);
 	string query;
