@@ -24,6 +24,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <utility>
 
 using namespace std;
 
@@ -67,6 +69,7 @@ Trie::add_term(std::string term) {
 		}	
 	}
 	curr_node->is_child = true;
+	curr_node->frequency += 1;
 }
 
 struct trie_node *
@@ -104,12 +107,35 @@ Trie::get_subtree(std::string term) {
 			subtree.insert(subtree.end(), child_tree.begin(), child_tree.end());
 		}
 	}
+
+
+	return subtree;
+}
+
+bool SortByFrequency(pair<string, int> i, pair<string, int> j) {
+	return i.second > j.second;
+}
+
+vector<std::string>
+Trie::get_sorted_subtree(std::string term) {
+	vector<string> raw_subtree = get_subtree(term);
+	vector<pair<string, int> > subtree_nodes;
+	for (unsigned int i = 0; i < raw_subtree.size(); ++i) {
+		struct trie_node* node = search_term(raw_subtree[i]);
+		subtree_nodes.push_back(make_pair(raw_subtree[i], node->frequency));
+	}
+	sort(subtree_nodes.begin(), subtree_nodes.end(), SortByFrequency);
+	vector<string> subtree;
+	for (unsigned int i = 0; i < subtree_nodes.size(); ++i) {
+		subtree.push_back(subtree_nodes[i].first);
+	}
 	return subtree;
 }
 
 void
 Trie::build_tree(Database db) {
-	string logname = "/home/pallavi/POSE/xapian/xapian-core/logs/" + db.get_uuid();
+	string logname = "/home/pallavi/POSE/xapian/xapian-core/logs/" 
+						+ db.get_uuid();
 	// cout << "Log file: " << logname << endl; 
 	std::ifstream logfile(logname.c_str(), std::ifstream::in);
 	string query;

@@ -32,9 +32,11 @@ struct XAPIAN_VISIBILITY_DEFAULT trie_node{
 	trie_node() {
 		value = '\0';
 		is_child = false;
+		frequency = 0;
 	}
 	char value;
 	bool is_child;
+	int frequency;
 	std::vector<trie_node *> children;	
 };
 
@@ -47,6 +49,8 @@ class XAPIAN_VISIBILITY_DEFAULT Trie {
 	void add_term(std::string term);
 	struct trie_node * search_term(std::string term);
 	std::vector<std::string> get_subtree(std::string term);
+	// Sorted on basis of frequency. Calls get_subtree internally. 
+	std::vector<std::string> get_sorted_subtree(std::string term);
 	void build_tree(Database db);
 };
 
