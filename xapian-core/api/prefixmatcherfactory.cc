@@ -1,5 +1,5 @@
-/** \file  synonymexpansion.h
- *  \brief Header file for synonym query expansion.
+/** @file prefixmatcherfactory.cc
+ * @brief Prefix Matcher Factory
  */
  /*
  * This program is free software; you can redistribute it and/or
@@ -17,28 +17,32 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
-#ifndef XAPIAN_INCLUDED_SYNONYMEXPANSION_H
-#define XAPIAN_INCLUDED_SYNONYMEXPANSION_H
+#include "xapian/prefixmatcherfactory.h"
+#include "/usr/local/WordNet-3.0/include/wn.h"
 
-#include <xapian/visibility.h>
-#include <xapian.h>
-
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <utility>
+
+using namespace std;
 
 namespace Xapian {
 
-class XAPIAN_VISIBILITY_DEFAULT SynonymExpand : public QueryExpansionDecorator{
-  public:
-	SynonymExpand(AbstractQueryExpansion *obj) {
-		original_query = obj->get_original_query();
-		results = obj->get_results();
-		expand();
+PrefixMatcher *
+PrefixMatcherFactory::get_prefix_matcher(PrefixMatcherType type) {
+	PrefixMatcher *matcher;
+	switch (type) {
+		case TRIE:
+			matcher = new Xapian::Trie();
+			break;
+		case HASHTABLE:
+			matcher = new Xapian::HashTable();
+			break;
 	}
-
-	void expand();
-};
-
+	return matcher;
 }
 
-#endif // XAPIAN_INCLUDED_SYNONYMEXPANSION_H
+}

@@ -40,18 +40,18 @@ struct XAPIAN_VISIBILITY_DEFAULT trie_node{
 	std::vector<trie_node *> children;	
 };
 
-class XAPIAN_VISIBILITY_DEFAULT Trie {
-  public:
-    struct trie_node root;
+class XAPIAN_VISIBILITY_DEFAULT Trie : public PrefixMatcher {
+  private:
+	struct trie_node *root;
 
+  public:
 	Trie();
-    // ~Trie();
 	void add_term(std::string term);
 	struct trie_node * search_term(std::string term);
-	std::vector<std::string> get_subtree(std::string term);
+	std::vector<std::string> get_matches(std::string term);
 	// Sorted on basis of frequency. Calls get_subtree internally. 
-	std::vector<std::string> get_sorted_subtree(std::string term);
-	void build_tree(Database db);
+	std::vector<std::string> get_sorted_matches(std::string term);
+	void build_matcher(Database db);
 };
 
 }

@@ -17,8 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
-#ifndef XAPIAN_INCLUDED_SYNONYMEXPANSION_H
-#define XAPIAN_INCLUDED_SYNONYMEXPANSION_H
+#ifndef XAPIAN_INCLUDED_HOMONYMEXPANSION_H
+#define XAPIAN_INCLUDED_HOMONYMEXPANSION_H
 
 #include <xapian/visibility.h>
 #include <xapian.h>
@@ -28,17 +28,11 @@
 
 namespace Xapian {
 
-class XAPIAN_VISIBILITY_DEFAULT SynonymExpand : public QueryExpansionDecorator{
+class XAPIAN_VISIBILITY_DEFAULT HomonymExpand : public QueryExpansionDecorator{
   public:
-	SynonymExpand(AbstractQueryExpansion *obj) {
-		original_query = obj->get_original_query();
-		results = obj->get_results();
-		expand();
-	}
-
-	void expand();
+	  void expand() { }
 };
 
 }
 
-#endif // XAPIAN_INCLUDED_SYNONYMEXPANSION_H
+#endif // XAPIAN_INCLUDED_HOMONYMEXPANSION_H

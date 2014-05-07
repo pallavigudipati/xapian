@@ -41,7 +41,12 @@ xapianinclude_HEADERS =\
 	include/xapian/visibility.h\
 	include/xapian/weight.h\
 	include/xapian/trie.h\
-	include/xapian/synonymexpansion.h
+	include/xapian/hashtable.h\
+	include/xapian/prefixmatcher.h\
+	include/xapian/prefixmatcherfactory.h\
+	include/xapian/synonymexpansion.h\
+	include/xapian/homonymexpansion.h\
+	include/xapian/queryexpansion.h
 
 nodist_xapianinclude_HEADERS =\
 	include/xapian/version.h

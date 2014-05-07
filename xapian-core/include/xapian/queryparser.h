@@ -97,7 +97,8 @@ class XAPIAN_VISIBILITY_DEFAULT PopulatedSimpleStopper : public SimpleStopper {
         template <class Iterator>
         PopulatedSimpleStopper(Iterator begin, Iterator end) : SimpleStopper(begin, end) { }
 
-        PopulatedSimpleStopper(const std::string &filename="/usr/local/src/xapian-dev/xapian-core/common/stop_words.txt") {
+        PopulatedSimpleStopper(const std::string &filename
+		 	="/home/pallavi/POSE/xapian/xapian-core/common/stop_words.txt") {
             std::ifstream input(filename.c_str());
             std::string word;
             while (input.good()) {
@@ -106,7 +107,7 @@ class XAPIAN_VISIBILITY_DEFAULT PopulatedSimpleStopper : public SimpleStopper {
             }
         }
 
-        virtual std::string get_description() const;
+        virtual std::string get_description() const {}
 };
 
 /// Base class for value range processors.

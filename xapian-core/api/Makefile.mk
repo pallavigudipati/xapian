@@ -51,4 +51,5 @@ lib_src +=\
 	api/vectortermlist.cc\
 	api/version.cc\
 	api/trie.cc\
+	api/prefixmatcherfactory.cc\
 	api/synonymexpansion.cc

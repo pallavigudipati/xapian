@@ -1,5 +1,5 @@
-/** \file  synonymexpansion.h
- *  \brief Header file for synonym query expansion.
+/** \file  prefixmatcher.h
+ *  \brief PrefixMatcher
  */
  /*
  * This program is free software; you can redistribute it and/or
@@ -17,8 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
-#ifndef XAPIAN_INCLUDED_SYNONYMEXPANSION_H
-#define XAPIAN_INCLUDED_SYNONYMEXPANSION_H
+#ifndef XAPIAN_INCLUDED_PREFIXMATCHER_H
+#define XAPIAN_INCLUDED_PREFIXMATCHER_H
 
 #include <xapian/visibility.h>
 #include <xapian.h>
@@ -28,17 +28,15 @@
 
 namespace Xapian {
 
-class XAPIAN_VISIBILITY_DEFAULT SynonymExpand : public QueryExpansionDecorator{
-  public:
-	SynonymExpand(AbstractQueryExpansion *obj) {
-		original_query = obj->get_original_query();
-		results = obj->get_results();
-		expand();
-	}
+//enum PrefixMatcherType {TRIE, HASHTABLE};
 
-	void expand();
+class XAPIAN_VISIBILITY_DEFAULT PrefixMatcher {
+  public:
+	virtual std::vector<std::string> get_matches(std::string term) { }
+	virtual std::vector<std::string> get_sorted_matches(std::string term) { }
+	virtual void build_matcher(Database db) { }
 };
 
 }
 
-#endif // XAPIAN_INCLUDED_SYNONYMEXPANSION_H
+#endif // XAPIAN_INCLUDED_PREFIXMATCHER_H

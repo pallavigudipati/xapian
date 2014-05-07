@@ -97,11 +97,26 @@
 // ELF visibility annotations for GCC.
 #include <xapian/visibility.h>
 
+// Prefix Matcher
+#include <xapian/prefixmatcher.h>
+
+// Prefix Matcher Factory
+#include <xapian/prefixmatcherfactory.h>
+
 // Trie
 #include <xapian/trie.h>
 
+// Hash Table
+#include <xapian/hashtable.h>
+
+// Query Expansion
+#include <xapian/queryexpansion.h>
+
 // Synonym Expansion
 #include <xapian/synonymexpansion.h>
+
+// Homonym Expansion
+#include <xapian/homonymexpansion.h>
 
 /// The Xapian namespace contains public interfaces for the Xapian library.
 namespace Xapian {

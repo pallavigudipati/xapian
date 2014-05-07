@@ -32,13 +32,13 @@ using namespace std;
 namespace Xapian {
 
 Trie::Trie() {
-// FILL something??
+	root = new trie_node();
 }
 
 void
 Trie::add_term(std::string term) {
 	// cout << "In add_term: " << term << endl;
-	struct trie_node *curr_node = &root;
+	struct trie_node *curr_node = root;
 	for (unsigned int i = 0; i < term.size(); ++i) {
 		if (curr_node->children.size()) {
 			for (vector<trie_node *>::iterator it = curr_node->children.begin();
@@ -74,7 +74,7 @@ Trie::add_term(std::string term) {
 
 struct trie_node *
 Trie::search_term(std::string term) {
-	struct trie_node *curr_node = &root;
+	struct trie_node *curr_node = root;
 	for (unsigned int i = 0; i < term.size(); ++i) {
 		for (vector<trie_node *>::iterator it = curr_node->children.begin();
 				it != curr_node->children.end(); ++it) {
@@ -91,7 +91,7 @@ Trie::search_term(std::string term) {
 }
 
 vector<std::string> 
-Trie::get_subtree(std::string term) {
+Trie::get_matches(std::string term) {
 	struct trie_node *start = search_term(term);
 	vector<string> subtree;
 	if (start && (start->children).size()) {
@@ -99,7 +99,7 @@ Trie::get_subtree(std::string term) {
 				it != start->children.end(); ++it) {
 			std::string child_term = term;
 			child_term.push_back((*it)->value);
-			vector<std::string> child_tree = get_subtree(child_term);
+			vector<std::string> child_tree = get_matches(child_term);
 			if ((*it)->is_child) {
 				subtree.push_back(child_term);
 			}
@@ -117,8 +117,8 @@ bool SortByFrequency(pair<string, int> i, pair<string, int> j) {
 }
 
 vector<std::string>
-Trie::get_sorted_subtree(std::string term) {
-	vector<string> raw_subtree = get_subtree(term);
+Trie::get_sorted_matches(std::string term) {
+	vector<string> raw_subtree = get_matches(term);
 	vector<pair<string, int> > subtree_nodes;
 	for (unsigned int i = 0; i < raw_subtree.size(); ++i) {
 		struct trie_node* node = search_term(raw_subtree[i]);
@@ -133,7 +133,7 @@ Trie::get_sorted_subtree(std::string term) {
 }
 
 void
-Trie::build_tree(Database db) {
+Trie::build_matcher(Database db) {
 	string logname = "/home/pallavi/POSE/xapian/xapian-core/logs/" 
 						+ db.get_uuid();
 	// cout << "Log file: " << logname << endl; 
