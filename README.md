@@ -1,6 +1,10 @@
-Welcome to the Xapian repository!
-=================================
+Enhancing Xapian
+=================
+Modules added for auto-completion and auto-expansion of queries.
+Also added design patterns to make further development easier in these areas.
 
+About Xapian
+============
 Xapian is split into several modules, which are held in sub-directories of
 the directory containing this file.  The core code and documentation is in
 the xapian-core module.
